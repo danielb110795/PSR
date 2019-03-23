@@ -5,7 +5,7 @@ namespace PSR
     public class DijkstraAlgorithm
     {
  
-        public int[] Dijkstra(int[,] graph, int src, int numberOfVertex)
+        public static int[] Dijkstra(int[,] graph, int src, int numberOfVertex)
         {
             int[] dist = new int[numberOfVertex];
             bool[] sptSet = new bool[numberOfVertex];
@@ -28,12 +28,12 @@ namespace PSR
                         dist[v] = dist[u] + graph[u, v];
             }
 
-            printSolution(dist, numberOfVertex);
+            //printSolution(dist, numberOfVertex);
 
             return dist;
         }
 
-        int minDistance(int[] distance, bool[] sptSet, int numberOfVertex)
+        static int minDistance(int[] distance, bool[] sptSet, int numberOfVertex)
         {
             int minimumDistance = int.MaxValue, minIndex = -1;
 
@@ -46,11 +46,12 @@ namespace PSR
             return minIndex;
         }
 
-        void printSolution(int[] dist, int numberOfVertex)
+        static void printSolution(int[] dist, int numberOfVertex)
         {
             Console.Write("Vertex     Distance " + "from Source\n");
             for (int i = 0; i < numberOfVertex; i++)
                 Console.Write(i + " \t\t " + dist[i] + "\n");
         }
+
     }
 }
