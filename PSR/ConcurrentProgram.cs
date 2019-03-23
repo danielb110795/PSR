@@ -20,7 +20,7 @@ namespace PSR
         }
         public void Start() // wczytywanie danych tymczasowo w tej metodzie
         {
-            graph = new Graph(); // instancja tej klasy będzie tylko na serwerze
+            graph = new Graph(@"macierz.txt"); // instancja tej klasy będzie tylko na serwerze
             sharedGraph = new SharedGraphData(graph.matrix);// klasa do przechowywania danych współdzielonych
 
             this.numberOfThreads = (sharedGraph.GetVertices > this.numberOfThreads) ? this.numberOfThreads : sharedGraph.GetVertices;
