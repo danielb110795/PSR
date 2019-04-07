@@ -12,6 +12,7 @@ namespace PSR
         private int[,] matrix;
         private int vertices;
         private int size;
+        private int lowestDist = 99999;
         private readonly object block = new object();
 
         public int[,] Matrix
@@ -44,7 +45,22 @@ namespace PSR
             {
                 return size;
             }
-        }   
+        }  
+        public int Dist
+        {
+            set
+            {
+                lock (block)
+                {
+                    lowestDist = (lowestDist > value) ? value : lowestDist;
+                }
+            }
+            get
+            {
+                return lowestDist;
+            }
+        }
+
 
         public SharedGraphData(int [,] matrix)
         {

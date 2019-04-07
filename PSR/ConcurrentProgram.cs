@@ -13,15 +13,24 @@ namespace PSR
         private Graph graph;
         private SharedGraphData sharedGraph;
 
+        public int BestResult
+        {
+            get
+            {
+                return sharedGraph.Dist;
+            }
+        }
 
-        public ConcurrentProgram(int numberOfThreads)
+
+        public ConcurrentProgram(int numberOfThreads,int[,] matrix)
         {
             this.numberOfThreads = numberOfThreads;
+            sharedGraph = new SharedGraphData(matrix);// klasa do przechowywania danych współdzielonych
         }
         public void Start() // wczytywanie danych tymczasowo w tej metodzie
         {
-            graph = new Graph(@"../../macierz.txt"); // instancja tej klasy będzie tylko na serwerze
-            sharedGraph = new SharedGraphData(graph.matrix);// klasa do przechowywania danych współdzielonych
+            //graph = new Graph(@"../../macierz.txt"); // instancja tej klasy będzie tylko na serwerze
+            
 
             this.numberOfThreads = (sharedGraph.GetVertices > this.numberOfThreads) ? this.numberOfThreads : sharedGraph.GetVertices;
 
@@ -51,14 +60,23 @@ namespace PSR
 
         private void doChildWork(int vertice)  // operacje na wątku
         {
+            int lowestDist = 9999;
+
             do
-            { 
+            {
+                
                 int[] sum = DijkstraAlgorithm.Dijkstra(sharedGraph.Matrix, vertice, sharedGraph.MatrixSize);
-                Console.WriteLine("Łączna długość najkrótszych ścieżek: " + "vert " + vertice+" dist "+sum.Sum());
+                int _sum = sum.Sum();
+                Console.WriteLine("Łączna długość najkrótszych ścieżek: " + "vert " + vertice+" dist "+_sum);
+
+                lowestDist = (_sum < lowestDist) ? _sum : lowestDist;
 
                 vertice = sharedGraph.GetNextVertice; // pobranie kolejnego wierzchołka do obliczeń
 
-            } while (vertice >= 0); 
+            } while (vertice >= 0);
+
+
+            sharedGraph.Dist = lowestDist;
 
         }
     }
